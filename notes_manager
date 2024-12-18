@@ -1,0 +1,51 @@
+notes_list = []  # List to store the user's notes
+
+def display_notes(notes_list):  # Function to display all the notes
+    if not notes_list:
+        return "No notes to display.\n"  # Returns message if no notes are available
+    else:
+        # Creates a string with all notes formatted for display
+        return "\n".join(f"Note {i} : {note}" for i, note in enumerate(notes_list))
+
+while True:  # Main loop that keeps running until the user decides to exit
+    try:
+        choice = int(input("What would you like to do?\n1. Add a note\n2. Display my notes\n3. Delete a note\n4. Save my notes\n5. Exit the program\n\n"))
+        
+        if choice == 1:  # Adding a new note to the list
+            note = input("Enter your note: ")
+            notes_list.append(note)  # Append the new note to the list
+            print("Note added!\n")
+        
+        elif choice == 2:  # Display all notes
+            print(display_notes(notes_list))
+        
+        elif choice == 3 and notes_list:  # Only proceed if there are notes to delete
+            print(display_notes(notes_list))  # Show current notes
+            note_to_delete = int(input("Which note would you like to delete? "))
+            
+            # Loop ensures valid input within the range of available notes
+            while not 0 <= note_to_delete < len(notes_list):  
+                try:
+                    note_to_delete = int(input("Please enter a valid note number: "))
+                except ValueError:  # Handle invalid inputs
+                    print("Invalid input. Please try again: ")
+            
+            del notes_list[note_to_delete]  # Remove the selected note
+            print("Note deleted!\nHere are your remaining notes:")
+            print(display_notes(notes_list))
+        
+        elif choice == 4:  # Saving notes to a text file
+            with open("notes.txt", "w") as file:  # Open (or create) a file in write mode
+                file.write(display_notes(notes_list))  # Write all notes to the file
+                print("Notes saved to 'notes.txt'!\n")
+        
+        elif choice == 5:  # Exit the program
+            print("Goodbye!")
+            break
+        
+        else:
+            print("Please enter a valid number: 1, 2, 3, 4, or 5")
+            continue
+    
+    except ValueError:  # Handle non-integer inputs
+        print("Please enter a valid number: 1, 2, 3, 4, or 5")
